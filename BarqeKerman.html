@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدول آدرس‌ها و کدها</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts for a clean Persian font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        // This script runs immediately to prevent a "flash of unstyled content".
+        // It sets the theme based on saved preference or system settings before the page renders.
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+    <style>
+        /* Apply the Vazirmatn font to the entire application */
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        /* Style for the scrollbar to make it more modern */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #2d3748; /* gray-800 */
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #a0aec0; /* gray-400 */
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #cbd5e0; /* gray-300 */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <!-- Header Section -->
+        <header class="relative text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">کدبندی آدرس‌های شهر کرمان</h1>
+            <p class="text-lg text-gray-600 dark:text-gray-400 mt-2">برای یافتن سریع، در کادر زیر جستجو کنید</p>
+            
+            <!-- Theme Toggle Button -->
+            <button id="theme-toggle" type="button" class="absolute top-0 left-0 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                <svg id="theme-toggle-dark-icon" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                <svg id="theme-toggle-light-icon" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+            </button>
+        </header>
+
+        <!-- Search Input -->
+        <div class="mb-6">
+            <input type="text" id="searchInput" placeholder="جستجو بر اساس آدرس یا کد..." 
+                   class="w-full p-4 text-lg border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 shadow-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:ring-blue-600 dark:focus:border-blue-600">
+        </div>
+
+        <!-- Table Container -->
+        <div class="overflow-x-auto bg-white rounded-xl shadow-md dark:bg-gray-800">
+            <table class="w-full text-right">
+                <!-- Table Header -->
+                <thead class="bg-gray-200 dark:bg-gray-700">
+                    <tr>
+                        <th class="p-4 text-lg font-semibold text-gray-700 dark:text-gray-200">کد</th>
+                        <th class="p-4 text-lg font-semibold text-gray-700 dark:text-gray-200">آدرس</th>
+                    </tr>
+                </thead>
+                <!-- Table Body -->
+                <tbody id="tableBody" class="divide-y divide-gray-200 dark:divide-gray-700">
+                    <!-- Rows will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="text-center mt-8 text-gray-500 dark:text-gray-400">
+            <p class="font-semibold text-lg mb-4">تهیه شده توسط پیج @BarqeKerman</p>
+            <div class="flex justify-center items-center space-x-6 rtl:space-x-reverse">
+                <a href="https://t.me/BarqeKerman" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+                    <svg class="w-8 h-8" role="img" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><title>Telegram</title><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm7.163 8.162l-2.07 9.68c-.145.678-.56 1.018-1.284 1.018-.518 0-.936-.244-1.31-.61l-3.05-2.96-1.47 1.41c-.162.162-.3.3-.51.3s-.348-.138-.51-.3l.348-3.13 5.86-5.28c.244-.21.048-.51-.288-.318l-7.23 4.54-3.05-1.01c-.64-.21-.65-.64.138-.948l11.23-4.39c.51-.21.948.138.78.78z"/></svg>
+                </a>
+                <a href="https://www.instagram.com/BarqeKerman" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-pink-500 dark:hover:text-pink-400 transition-colors">
+                    <svg class="w-8 h-8" role="img" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><title>Instagram</title><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.784.305-1.457.718-2.123 1.385S.935 3.356.63 4.14C.333 4.905.13 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.26 2.148.558 2.913.306.784.718 1.457 1.385 2.123s1.34 1.08 2.123 1.385c.766.298 1.636.498 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.26 2.913-.558.784-.305 1.457-.718 2.123-1.385s1.08-1.34 1.385-2.123c.298-.765.498-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.26-2.148-.558-2.913-.306-.784-.718-1.457-1.385-2.123S20.644.935 19.86.63c-.765-.298-1.636-.498-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.01 4.85.07 1.17.055 1.805.248 2.227.415.562.217.96.477 1.382.896.419.42.68.819.896 1.381.164.422.36 1.057.413 2.227.062 1.265.073 1.646.073 4.85s-.01 3.585-.074 4.85c-.056 1.17-.25 1.805-.414 2.227-.216.562-.477.96-.896 1.382-.42.419-.82.68-1.381.896-.423.164-1.057.36-2.227.413-1.265.062-1.646.073-4.85.073s-3.585-.01-4.85-.074c-1.17-.056-1.805-.25-2.227-.414-.562-.216-.96-.477-1.382-.896-.419-.42-.68-.82-1.381-.896-.164-.423-.36-1.057-.413-2.227-.062-1.265-.073-1.646-.073-4.85s.01-3.585.074-4.85c.056-1.17.25-1.805.414-2.227.216-.562.477-.96.896-1.382.42-.419.82-.68 1.381-.896.423-.164 1.057-.36 2.227-.413 1.265-.062 1.646-.073 4.85-.073zM12 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg>
+                </a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        // --- Data Extracted from PDF ---
+        const addressData = [
+            { code: "۱۰۱", address: "بلوار امام حسین، بلوار نیکزاد - ابتدای ابوذر شمالی - شهرک قندی - ضلع شمالی بزرگراه امام از پل ابوذر تا چهارراه جوپاری، خ حجتیه - گلدشت" },
+            { code: "۱۰۲", address: "قسمتی از پانصد دستگاه، شهرک نیکزاد، خیابان ورزنده، ابوذر جنوبی - میدان رسالت، مالک اشتر جنوبی - ابتدای بلوار رسالت - بلوار ۲۴ مهر" },
+            { code: "۱۰۴", address: "مالک اشتر شمالی - ضلع جنوبی پارک مطهری - فروشگاه معلم - بلوار قدس ک ۱۵ و مجتمع گلستان" },
+            { code: "۱۰۵", address: "ابتدای استقلال - بهشتی - انتهای فردوسی - جهاد ۱ و ۳ - ابن سینا غربی" },
+            { code: "۱۰۶", address: "خیابان خواجو، پارک نشاط - خیابان سعدی - ابتدای فردوسی - خیابان قرنی" },
+            { code: "۱۰۷", address: "فروشگاه رفاه - ضلع شمالی، غربی و شرقی پارک مطهری - کوچه خیام - آیت الله صالحی، آسیاباد شمالی - خواجو ۱۳ (غربی)" },
+            { code: "۱۰۹", address: "چهارراه فیروزه، لاری نجفی (نادر)، زهره کرمانی شرقی - بهمنیار - پنج راه ۲۴ آذر - کوچه کشتارگاه، جهاد ۲۰ - جهاد ۳۸" },
+            { code: "۱۱۰", address: "خرمشهر - ابوذر شمالی - بلوار قدس - شیخ احمد کافی شمالی - آسیاباد جنوبی با قدرت شرقی" },
+            { code: "۱۱۱", address: "مباشرزاده - ابوسعیدی - پروین اعتصامی غربی و شرقی، کوچه تبریزچی - خیابان استقلال، کلینیک بصیر" },
+            { code: "۱۱۲", address: "انتهای خواجو - فیروزه - ۴ اتورفسنجان - والفجر جنوبی - زهره کرمانی غربی - امام جمعه، ابتدای بلوار جمهوری - بهمنیار ۲" },
+            { code: "۱۱۳", address: "کوی دادگستری، جاده تهران از سه راه فارابی تا سه راه دخانیات - بلوار فارابی - هزار و یکشب، حد فاصل بلوار جمهوری و ویلا، بلوار جمهوری از چهارراه شفا تا امام جمعه" },
+            { code: "۱۱۴", address: "خواجو ۲۱، ۲۲ و ۲۳ - ابتدای ۲۴ آذر - اقبال (نامجو) - حافظ - جامی جنوبی - مولوی - ابتدای جهاد" },
+            { code: "۲۰۱", address: "بلوار پارادیس (عباسپور) - شهرک مهاجرین - خ ورزش - خ ارتش - بلوار جانباز - چهارراه کاظمی - خ غزه (قدس) - خ معلم" },
+            { code: "۲۰۲", address: "خ فیروزآباد - باستانی پاریزی، فتح آبادان - دارلک - دادبین - انقلاب - خ دادبین و ۲۱" },
+            { code: "۲۰۳", address: "خیابان مفتح از تقاطع مهدیه تا جهاد - خیابان شهید رئیسی حد فاصل بلوار جانباز تا کلینیک ثامن، خیابان مهدیه از تقاطع بزرگراه تا بلوار مفتح - ضلع شمالی بزرگراه امام رضا حدفاصل بلوار بلدالامین تا شهرک ولایت" },
+            { code: "۲۰۴", address: "شهدا خانوک، شریعتی ۲۷ تا میدان مشتاق (شهدا) - مسجد جامع - خ فتحعلیشاهی - قسمتی از خیابان مهدیه کوچه‌های ۱۱ تا ۱۷ و ۸ تا ۲۴ - بلوار شهدای خانوک ک ۱۶ و بلوار سیدی کوچه ۱۶" },
+            { code: "۲۰۵", address: "خ امام سجاد - بلوار فرزانگان - پردیس - حکمت - رز - خ حکیم از ک ۲۴ تا انتها" },
+            { code: "۲۰۶", address: "خ مهدیه - خ نظری زاده - خ کارگر - خ مصلی - شهرداری مرکز - بوستان شورا، خ کامیاب، خیابان پاسداران" },
+            { code: "۲۰۷", address: "جاده سعیدی - شهرک سیدی - بلوار فواد، روستای کوهپایه و حومه" },
+            { code: "۲۰۸", address: "بلوار سیدی - چهارراه باهنر - ابوحامد - چمران - سادات خوشرو - ابن سینا شرقی - عباس صباحی - پارک باغملی، وحشی بافقی - خیابان ابن سینا - خیابان قرنی حد فاصل میدان تا چهار راه باغملی، خیابان امام حد فاصل میدان قرنی تا چهار راه طالقانی" },
+            { code: "۲۱۰", address: "روستای سیدی - شهرک سیدی" },
+            { code: "۲۱۲", address: "جاده قدیم زرند، جاده زرند بعد از شهرک ولایت تا کیلومتر ۱۵، ضلع شمالی بزرگراه امام رضا از پل سیدی تا پل خورشید - شهرک بلد الامین، خیابان آسمان - شهرک ولایت" },
+            { code: "۲۱۴", address: "خ باهنر - ایرانمنش - چمران - تا چهارراه کاظمی تا بانک سپه" },
+            { code: "۳۰۱", address: "ضلع جنوبی بلوار جمهوری از پل راه آهن تا جمهوری ۵۷، نواب همتی فر شمالی - هدایت، ماهان - بیهقی - ناظم الاطبا" },
+            { code: "۳۰۲", address: "خ موحدی نیا - شهرک اکباتان - بلوار شهید سلیمانی - رودکی - ساقی کوثر - بلوار آزادگان تا چهارراه شیراز - خیابان علی ضیا و آبنوس، انتهای خیابان امام جمعه" },
+            { code: "۳۰۳", address: "ضلع شمالی بلوار جمهوری از سه راه هوانیروز تا چهارراه فرهنگیان - بلوار هوشنگ مرادی شمالی - هتل پارس" },
+            { code: "۳۰۴", address: "بلوار هاشمی از پل راه آهن تا بلوار حجاج - همتی فر جنوبی - خالداری - مجتمع‌های: سحاب، گلستان، پردیس - خ زیتون - بلوار پزشک - ضلع شرقی حجاج" },
+            { code: "۳۰۵", address: "ضلع شمالی بلوار جمهوری از سه راه هوانیروز تا صادقیه - بلوار رضوان - خ نسترن - غدیر ۱، شقایق - ارغوان - لاله شمالی" },
+            { code: "۳۰۶", address: "خ هلال احمر - ضلع جنوبی ب جمهوری از پل راه آهن تا چهارراه امیر کبیر - بلوار کشاورز - ب امیر کبیر - بلوار بوعلی" },
+            { code: "۳۰۷", address: "بلوار هوانیروز - غدیر ۲ - غدیر ۳ - لاله جنوبی" },
+            { code: "۳۰۸", address: "ضلع شمالی بلوار صدوقی از سه راه معلم تا پل راه آهن - بلوار کشاورز - بلوار معلم - هوشنگ مرادی جنوبی - صدوقی ۱۲ تا سه راه معلم - ستاد فرماندهی نیروی انتظامی، بلوار جمهوری ضلع جنوبی حد فاصل چهار راه شفا تا چهار راه فرهنگیان" },
+            { code: "۳۰۹", address: "آسیاباد شمالی - چهارراه بسیج - میرزا کوچک خان شمالی، خرازی - شرکت غله - مجتمع ساروچ" },
+            { code: "۳۱۰", address: "ضلع شرقی بلوار هوانیروز - شهرک شهرداری - بلوار شهدای هوانیروز - شهرک هوانیروز و صنعتی اختیار آباد" },
+            { code: "۳۱۱", address: "ضلع جنوبی بلوار صدوقی از پل راه آهن تا سه راه معلم - ضلع غربی بلوار ایثار - بلوار دانش، خ یاقوت - زمرد - بلوار هزار" },
+            { code: "۳۱۲", address: "خ کمیل - بلوار امام حسن - شهرک دادگستری - شهرک مخابرات" },
+            { code: "۴۰۳", address: "روستای رضا آباد، بلوار هاشمی ضلع جنوبی از پل راه آهن تا پارک مسافر - روستای حاجی آباد" },
+            { code: "۴۰۴", address: "ضلع جنوبی ب جمهوری از ک ۵۵ تا میدان پرواز تا بلوار حجاج - ضلع شمالی بزرگراه هاشمی از کارخانه سیمان تا بلوار حجاج - خ وصال - میعاد - خوارزمی" },
+            { code: "۴۰۵", address: "روستای سعادت آباد - فرودگاه - هواپیمایی ماهان - شیروانی - زینهاری - مجتمع بامداد، اختیار آباد، جاده کوه بادامیه - کمربندی امام رضا، پمپ‌های کشاورزی پشت کارخانه سیمان" },
+            { code: "۴۰۶", address: "ضلع شمالی بزرگراه هاشمی از بلوار حجاج تا بلوار امام رضا" },
+            { code: "۴۰۷", address: "پمپ کشاورزی - قائم آباد" },
+            { code: "۴۰۹", address: "جاده جوپار - جاده قریه العرب - مرغ اجداد - حجت آباد" },
+            { code: "۴۱۰", address: "برقراری پمپ آب نیروگاه - پمپ آب کارخانه سیمان" },
+            { code: "۵۰۱", address: "خ اسدابادی - خ امیرالمومنین - شهربازی" },
+            { code: "۵۰۲", address: "ضلع شرقی هفت باغ - جاده کوره ها" },
+            { code: "۵۰۳", address: "ضلع غربی هفت باغ علوی تا پارک لاله - شهرک های هفت باغ" },
+            { code: "۵۰۴", address: "شهرک صنعتی شماره ۱، روستای مهدی آباد، حاکم آباد - توکل آباد" },
+            { code: "۵۰۵", address: "قسمتی از شهرک صنعتی شماره ۱ - جاده جوپار تا روغن نباتی گلناز" },
+            { code: "۵۰۶", address: "دانشگاه آزاد، شهرک خواجو - شهرک ن و القلم - شهرک امام علی - مسکن مهر ۴۱۴ واحدی" },
+            { code: "۵۰۷", address: "ضلع غربی شهاب - قرنی - طالقانی - ارگ - خ تجلی - گلباز خان - بهزاد" },
+            { code: "۵۰۸", address: "انتهای گلدشت - میرزا آقاخان جنوبی - بلوار ولیعصر - خ خبرنگار" },
+            { code: "۵۰۹", address: "روستای الله آباد، خیابان بعثت از ابتدا تا کوچه ۲۹، خیابان بهاران - دانشگاه بعثت - خ اتحاد - خ ۱۴ معصوم" },
+            { code: "۵۱۰", address: "ضلع شرقی شهاب از پل زندان تا سه راه گوهری - خ اعتباری - خ نیایش - نگارستانی - فرهنگ - بلوار ساوه - دانشگاه علوم پزشکی" },
+            { code: "۵۱۱", address: "شهرک ایرانمنش - خ ثار الله - خ بعثت - خ ثامن الائمه - خ حافظان قرآن - ضلع جنوبی بزرگراه امام از مالک اشتر جنوبی تا چهارراه جوپاری" },
+            { code: "۵۱۲", address: "ضلع غربی بلوار ۲۲ بهمن - خ شاه نعمت الله - خ میرزا رضا - قسمتی از خ امام - خ پیروزی - خ ابراهیم خلیل الله - قسمتی از خ اعتباری" },
+            { code: "۶۰۱", address: "معادن شن گلومک" },
+            { code: "۷۰۳", address: "قدوسی - دستغیب - شهیدان محمدی - محله تور و طناب - نگارستانی - قسمتی از شهاب و سه راه گوهری" },
+            { code: "۷۰۴", address: "خ سرباز - سلمان فارسی - قسمتی از مدرس - خ پیرانشهر" },
+            { code: "۷۰۵", address: "جنگل قائم - بزرگراه آیت الله خامنه ای از میدان بیرم آباد تا خرز، بلوار سجادیه - خ حکیم از ابتدا تا کوچه ۱۸" },
+            { code: "۷۰۶", address: "خ منجی - شهیدان ماهانی - شهدا - مدیریت از سه راه تا چهارراه میدان شهدا - خ احمدی - خ ناصریه" },
+            { code: "۷۰۷", address: "قدوسی - دستغیب - ۲۰ متری بهشتی - ب امام صادق ضلع شمالی از میدان تا باغ امام رضا" },
+            { code: "۷۰۸", address: "قسمتی از سرباز، قسمتی از هفده شهریور - مدرس - برزو آمیغی" },
+            { code: "۷۰۹", address: "روستای ده بالا، ده آخوند - گینکان - خ صیاد شیرازی - خ مغفوری - خ فلاح" },
+            { code: "۷۱۰", address: "روستای گجگین - معادن شن - شرکت سیمرغ" },
+            { code: "۷۱۱", address: "میدان تره بار - کوچه تالار ارشیا - حسین آباد خان - کارخانه آسفالت شهرداری - جاده ماهان" },
+            { code: "۷۱۲", address: "شهرک هشت بهشت، شهرک صنعتی همت، داروگر - بزرگراه امام - انتهای دستغیب" },
+            { code: "۷۱۳", address: "امام صادق، ابتدای اسد آبادی - قدوسی - هفده شهریور - مدرس - چهارراه پیروزی - شهاب، منازل دارایی" },
+            { code: "۸۰۱", address: "خ بحر العلوم - رزمندگان - شهرک پیروزی - منازل سیمان شقایق شمالی" },
+            { code: "۸۰۲", address: "خ نماز - عرفان - یاسین - صبا - خ مصلی - خ مهاجرین" },
+            { code: "۸۰۳", address: "بلوار شیراز - نصر - خ پردیس - بوستان - حافظیه - قطبی نژاد، انتهای ۲۴ آذر - هاشم نادری" },
+            { code: "۸۰۵", address: "چهارراه شفا تا چهارراه فرهنگیان - پارک مادر و اطراف" },
+            { code: "۸۰۹", address: "ضلع جنوبی بلوار کوثر - ابتدای بلوار نصر - میدان کوثر، انتهای هزار و یکشب تا چهارراه ویلا، خ ویلا، میثم - والفجر شمالی، سرجنگلداری فاز ۱ و ۲، بلوار پرستار - خ شفا - اورژانس شفا - ضلع شمالی ب جمهوری از بلوار قائم، شرف آباد از کوچه ۲۹ تا قبل از زنگی آباد" },
+            { code: "۸۱۰", address: "ضلع شرقی خ رجایی، خورشید - خ پاسداران - رضوانی، کامیاب، ابتدای بلوار قائم شرف آباد تا کوچه ۲۴، انتهای بلوار آزادگان تا چهارراه شیراز، از چهارراه آزادگان تا پنج راه جهاد (کوچه ۶۲ مشهد)" },
+            { code: "۸۱۱", address: "جاده زنگی آباد، انتهای شرف آباد از ک ۴۷ به بعد" },
+            { code: "۸۱۳", address: "ب جهاد از بزرگراه تا سه راه عطار - خ عطار - شهرک افضلی پور، شهرک رضوان" },
+            { code: "۹۰۱", address: "شرف آباد از قایم ۱۱ تا خ امام رضا - ۲۰ متری مطهری - شهرک سدید" },
+            { code: "۹۰۳", address: "خ بعثت از ک ۲۹ تا انتها - شهرک ۱۴ معصوم، کوره های باقرآباد" },
+            { code: "۹۰۴", address: "بلوار شاهد از پل بازرگانی تا ترمینال - خ یزدان شناس - خ هجرت، الله آباد - خ بهارستان، ۳۰ متری حجت - ۳۰ متری قربانی" },
+            { code: "۹۰۵", address: "شهرک مطهری - منازل مسکن مهر ۴۲ و ۵۷ هکتاری - بلوار ابوالفضل - بلوار ایثار - معرفت - کرامت شمالی و جنوبی - خ مهر" }
+        ];
+
+        // --- JavaScript Logic ---
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            const tableBody = document.getElementById('tableBody');
+            const themeToggleButton = document.getElementById('theme-toggle');
+            const darkIcon = document.getElementById('theme-toggle-dark-icon');
+            const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+            /**
+             * Updates the visibility of the theme icons based on the current theme.
+             */
+            function updateThemeIcons() {
+                if (document.documentElement.classList.contains('dark')) {
+                    darkIcon.classList.add('hidden');
+                    lightIcon.classList.remove('hidden');
+                } else {
+                    darkIcon.classList.remove('hidden');
+                    lightIcon.classList.add('hidden');
+                }
+            }
+
+            /**
+             * Renders the table rows based on the provided data array.
+             * @param {Array<Object>} data - The array of address objects to display.
+             */
+            function renderTable(data) {
+                tableBody.innerHTML = '';
+                if (data.length === 0) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td colspan="2" class="text-center p-8 text-lg text-gray-500 dark:text-gray-400">موردی یافت نشد.</td>`;
+                    tableBody.appendChild(row);
+                    return;
+                }
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.className = 'hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200';
+                    row.innerHTML = `
+                        <td class="p-4 text-2xl font-black text-gray-900 dark:text-white">${item.code}</td>
+                        <td class="p-4 leading-relaxed">${item.address || '<span class="text-gray-400">بدون آدرس</span>'}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+
+            /**
+             * Filters the data based on the search input and re-renders the table.
+             */
+            function handleSearch() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const filteredData = addressData.filter(item => {
+                    const addressMatch = item.address.toLowerCase().includes(searchTerm);
+                    const codeMatch = item.code.toLowerCase().includes(searchTerm);
+                    return addressMatch || codeMatch;
+                });
+                renderTable(filteredData);
+            }
+
+            // --- Event Listeners ---
+            
+            searchInput.addEventListener('keyup', handleSearch);
+
+            themeToggleButton.addEventListener('click', () => {
+                // Toggle the 'dark' class on the <html> element
+                document.documentElement.classList.toggle('dark');
+
+                // Update localStorage with the new theme preference
+                if (document.documentElement.classList.contains('dark')) {
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                }
+
+                // Update the button icon to reflect the new state
+                updateThemeIcons();
+            });
+
+            // --- Initial Render ---
+            renderTable(addressData);
+            updateThemeIcons(); // Set the correct icon on initial page load
+        });
+
+    </script>
+</body>
+</html>
